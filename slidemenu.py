@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-# Menu for Watersnoodmuseum Zeeland.
 # -*- coding: utf-8 -*-
 
+import json
+import os
 from pygame import *
 import subprocess
 font.init()
@@ -37,7 +38,8 @@ def menu(
          midbottom  = None,
          bottomright= None,
          centerx    = None,
-         centery    = None
+         centery    = None,
+         menu_item_idx = 0  # currently selected menu_item_idx
         ):
     """
     menu(
@@ -218,15 +220,19 @@ def menu(
             i.x = i.animx.pop(0)
 
 
-    mouse.set_pos(menu[0].center)
+    # set currently selected menu item
+    idx = menu_item_idx % len(menu)
+
+    mouse.set_pos(menu[idx].center)
     hold_rect_cursor = Rect((-100,-100),cursor_img.get_size() if cursor_img else (0,0))
     hold_bg_cursor   = Surface((0,0))
     if not cursor_img:
         cursor_img   = Surface((0,0))
-    idx = 0
+    # idx = 0
     tooltip_seen = 0
     r = show()
     dirty = ()
+
     while True:
         ev = GetEvent.poll()
         # if ev.type == NOEVENT and ev.inactiv >= tooltiptime:
@@ -333,7 +339,18 @@ if __name__ == '__main__':
     scr.blit(bg, bg.get_rect(center=center))
     display.flip();print(menu.__doc__)
 
+    # defaults for current menu and item
     current_menu = 0  # 0, 1
+    menu_item_idx = 0
+
+    try:
+        if os.path.exists('slide_menu_memory.json'):
+            with open('slide_menu_memory.json', 'r') as f:
+                slide_menu_memory = json.loads(f.read())
+                current_menu = slide_menu_memory['menu']
+                menu_item_idx = slide_menu_memory['menu_item']
+    except:
+        pass
 
     # Note that the folders contain some typos. They are matched with the
     # actual system.
@@ -388,16 +405,23 @@ if __name__ == '__main__':
             centerx=512,
             centery=384,
             cursor_img = image.load('mouse.png'),  # We load it so we can disable it.
+            menu_item_idx=menu_item_idx
             )
 
         print resp
         if resp[0] is None: # ESC
-            break  
-        elif resp[0] == 'volgende': 
+            break
+        elif resp[0] == 'volgende':
             current_menu += 1
         elif resp[0] == 'vorige':
             current_menu -= 1
         else:
+            try:
+                slide_menu_memory = {'menu': current_menu, 'menu_item': resp[1]}
+                with open('slide_menu_memory.json', 'w') as f:
+                    json.dump(slide_menu_memory, f)
+            except:
+                pass
             # Try to open scenario
             display.toggle_fullscreen() # Get out of full screen
             subprocess.call([
@@ -405,7 +429,7 @@ if __name__ == '__main__':
                     resp[2]])
             display.toggle_fullscreen() # Get into full screen
             # subprocess.call([
-            #         'python', 
+            #         'python',
             #         '3di.py',
             #         '--use-config',
             #         #'configurations/test_museum.ini',
