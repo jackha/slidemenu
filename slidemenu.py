@@ -392,6 +392,15 @@ if __name__ == '__main__':
              #'30 Zuid-Beveland - west (Klimaat scenario)::ZuidBeverlandWestKlimaat',
              #'31 Zuid-Beveland - oost (Klimaat scenario)::ZuidBerverlandOostklimaat',
              #'32 Zeeuws-Vlaanderen (Klimaat scenario)::ZeeuwsVlaanderenKlimaat',
+	     'Baarland (Borsele)::Baarland',
+	     'Burgsluis (Schouwen-Duiveland)::Burgsluis',
+	     'Den Osse - extreem (Schouwen-Duiveland)::DenOsseExtreem',
+	     'Grote Kreek Veere (Noord-Beveland)::GroteKreekVeere',
+	     'Grote Kreek Veere - extreem (Noord-Beveland)::GroteKreekVeereExtreem',
+	     'Kattendijke (Zuid-Beveland - oost)::Kattendijke',
+	     'St. Annaland (Tholen en St. Philipsland)::StAnnaland',
+	     'Tholen - waterberging (Tholen en St. Philipsland)::TholenWaterberging',
+	     'Tienhonderdpolder (Zeeuws-Vlaanderen)::Tienhonderdpolder',
              ]
         }
 
